@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DNS 解析工具</title>
+<style>/* INLINE_CSS */</style>
+</head>
+<body>
+<div class="page-wrapper">
+  <header class="header">
+    <div class="header-brand">
+      <span class="header-brand-icon">D</span>
+      DNS 解析工具
+    </div>
+    <div class="header-actions">
+      <span class="header-doh-url" id="dohUrlDisplay" title="点击复制 DoH 地址">加载中…</span>
+      <button class="theme-toggle" id="themeToggle" title="切换主题" aria-label="切换主题">&#9681;</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="section">
+      <div class="section-header">查询</div>
+      <div class="card">
+        <div class="card-body">
+          <form id="resolveForm">
+            <div class="form-group">
+              <label class="form-label" for="dohSelect">DoH 服务器</label>
+              <select id="dohSelect" class="form-select">
+                <option value="current" selected>当前站点</option>
+                <option value="https://dns.alidns.com/resolve">dns.alidns.com（阿里）</option>
+                <option value="https://sm2.doh.pub/dns-query">sm2.doh.pub（腾讯）</option>
+                <option value="https://doh.360.cn/resolve">doh.360.cn（360）</option>
+                <option value="https://cloudflare-dns.com/dns-query">cloudflare-dns.com（Cloudflare）</option>
+                <option value="https://dns.google/resolve">dns.google（谷歌）</option>
+                <option value="https://dns.adguard-dns.com/resolve">dns.adguard-dns.com（AdGuard）</option>
+                <option value="https://dns.sb/dns-query">dns.sb（DNS.SB）</option>
+                <option value="https://zero.dns0.eu/">zero.dns0.eu（dns0）</option>
+                <option value="https://dns.nextdns.io">dns.nextdns.io（NextDNS）</option>
+                <option value="https://dns.rabbitdns.org/dns-query">dns.rabbitdns.org（Rabbit DNS）</option>
+                <option value="https://basic.rethinkdns.com/">basic.rethinkdns.com（RethinkDNS）</option>
+                <option value="https://v.recipes/dns-query">v.recipes（v.recipes DNS）</option>
+                <option value="custom">自定义…</option>
+              </select>
+            </div>
+
+            <div class="form-custom" id="customDohContainer">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label" for="customDoh">自定义 DoH 地址</label>
+                <input type="text" id="customDoh" class="form-input" placeholder="https://example.com/dns-query">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="domain">域名</label>
+              <div class="input-row">
+                <input type="text" id="domain" class="form-input" value="www.google.com" placeholder="example.com" autocomplete="off" spellcheck="false">
+                <button type="button" class="btn btn-secondary" id="clearBtn">清除</button>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">查询</button>
+              <button type="button" class="btn btn-secondary" id="getJsonBtn">获取 JSON</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="resultSection" style="display:none">
+      <div class="section-header">结果</div>
+      <div class="card">
+        <div class="status-bar" id="statusBar">
+          <span class="status-dot"></span>
+          <span id="statusText">就绪</span>
+        </div>
+        <div class="tabs-nav" id="resultTabs" role="tablist">
+          <button class="tabs-nav-btn active" data-tab="tab-ipv4" role="tab">IPv4</button>
+          <button class="tabs-nav-btn" data-tab="tab-ipv6" role="tab">IPv6</button>
+          <button class="tabs-nav-btn" data-tab="tab-ns" role="tab">NS</button>
+          <button class="tabs-nav-btn" data-tab="tab-raw" role="tab">Raw</button>
+        </div>
+        <div class="tabs-content">
+          <div class="tabs-pane active" id="tab-ipv4" role="tabpanel">
+            <div class="record-summary" id="summary-ipv4">等待查询…</div>
+            <div class="record-list" id="records-ipv4"></div>
+          </div>
+          <div class="tabs-pane" id="tab-ipv6" role="tabpanel">
+            <div class="record-summary" id="summary-ipv6">等待查询…</div>
+            <div class="record-list" id="records-ipv6"></div>
+          </div>
+          <div class="tabs-pane" id="tab-ns" role="tabpanel">
+            <div class="record-summary" id="summary-ns">等待查询…</div>
+            <div class="record-list" id="records-ns"></div>
+          </div>
+          <div class="tabs-pane" id="tab-raw" role="tabpanel">
+            <pre class="raw-json" id="resultRaw">等待查询…</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="errorSection" style="display:none">
+      <div class="section-header">错误</div>
+      <div class="card">
+        <div class="card-body">
+          <div class="error-state" id="errorMessage"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div>基于 Cloudflare Workers 的 DoH 解析服务</div>
+    <div><a href="https://github.com/cmliu/CF-Workers-DoH" target="_blank" rel="noopener">GitHub</a></div>
+  </footer>
+</div>
+<script>window.__DOH_PATH__ = '__DOH_PATH__';</script>
+<script>/* INLINE_JS */</script>
+</body>
+</html>
